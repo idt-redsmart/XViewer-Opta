@@ -424,6 +424,8 @@ public:
      */
     StaticJsonDocument<200> getProcessStatus();
 
+    void setApiDbg(bool dbgOn = true) { _dbgAOn = dbgOn; }
+
     // DELETE CONFIG
     /**
      * @brief   Delete the current sensor configuration used to initialize data at startup.

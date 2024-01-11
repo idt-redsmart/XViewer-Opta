@@ -31,7 +31,7 @@ bool Alarm::addAlarm(char code[ALARM_CODE_SIZE], char name[ALARM_NAME_SIZE])
 
     _alarms.push_back(tmp);
 
-    sprintf(_buffer, "Alarm added\tCode: %23s | Name: %32s", code, name);
+    sprintf(_buffer, "Alarm added\tCode: %32s | Name: %32s", code, name);
     _dbg(_buffer);
 
     return true;

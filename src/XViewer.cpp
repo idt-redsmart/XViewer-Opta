@@ -73,7 +73,7 @@ void XViewer::handleClient()
 	{
 		bool isGet = false;
 
-		Serial.println("New client");
+		_dbgA("New client");
 
 		bool currentLineIsBlank = true;
 
@@ -102,9 +102,9 @@ void XViewer::handleClient()
 
 						line = line.substring(0, line.indexOf('\n'));
 
-						// Serial.println("line: " + String(line));
+						// _dbgA("line: " + String(line));
 						line = line.substring(line.indexOf('/') + 1, line.indexOf("HTTP") - 1);
-						Serial.println("Incoming request: " + String(line));
+						_dbgA("Incoming request: " + String(line));
 
 						// SWITCH RESPONSE
 						if (line.equals(P_ADD_USER))
@@ -140,7 +140,7 @@ void XViewer::handleClient()
 						}
 
 						// SEND RESPONSE
-						Serial.println(("BODY: " + body));
+						_dbgA(("BODY: " + body));
 
 						_sendResponse(client, _currentResponse, body);
 						break;
@@ -154,7 +154,7 @@ void XViewer::handleClient()
 
 					if (_lineCounter == 0)
 					{
-						Serial.println(line);
+						_dbgA(line);
 
 						_lineCounter++;
 
@@ -162,11 +162,11 @@ void XViewer::handleClient()
 						{
 							isGet = true;
 
-							// Serial.println("line: " + String(line));
+							// _dbgA("line: " + String(line));
 							line = line.substring(line.indexOf('/') + 1, line.indexOf("HTTP") - 1);
 							if (line.equals(""))
 								line = "GET / ";
-							Serial.println("Incoming request: " + String(line));
+							_dbgA("Incoming request: " + String(line));
 
 							if (isspace(line[5]))
 								_currentResponse = response_handleRoot;
@@ -208,7 +208,7 @@ void XViewer::handleClient()
 		}
 		delay(1);
 		client.stop();
-		Serial.println("Client disconnected");
+		_dbgA("Client disconnected");
 	}
 }
 
