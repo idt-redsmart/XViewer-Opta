@@ -159,5 +159,5 @@ DynamicJsonDocument Alarm::vectToJson()
 void Alarm::_dbg(String str)
 {
     if (_dbgOn)
-        Serial.println("[AL]\t" + str);
+        Serial.println("[ALARM]\t" + str);
 }

@@ -112,11 +112,11 @@ String Printer::_boolToString(bool data)
 void Printer::_dbg(String str)
 {
     if (_dbgOn)
-        Serial.println("[PR]\t" + str);
+        Serial.println("[PRINTER]\t" + str);
 }
 
 void XViewer::_dbgP(String str)
 {
     if (_dbgPOn)
-        Serial.println("[PR]\t" + str);
+        Serial.println("[PRINTER]\t" + str);
 }

@@ -352,12 +352,18 @@ bool XViewer::updateProdCustomer(char code[PROD_CODE_SIZE], char newCstr[PROD_CS
 
 bool XViewer::updateProdCounter(char code[PROD_CODE_SIZE], uint8_t counter, uint32_t newCounterVal)
 {
-	return _prods.updateCounter(code, counter, newCounterVal);
+	if(_prods.updateCounter(code, counter, newCounterVal) && _storeProd())
+		return true;
+	else
+		return false;
 }
 
 bool XViewer::updateProdCounter(char code[PROD_CODE_SIZE], uint8_t counter)
 {
-	return _prods.updateCounter(code, counter);
+	if(_prods.updateCounter(code, counter) && _storeProd())
+		return true;
+	else
+		return false;
 }
 
 prodStruct_t XViewer::getCurrentProd()
@@ -528,8 +534,8 @@ void XViewer::_ledLoop()
 	}
 	else
 	{
-		if (digitalRead(ST_LED) != 0)
-			digitalWrite(ST_LED, 0);
+		if (digitalRead(ST_LED) != 1)
+			digitalWrite(ST_LED, 1);
 		return;
 	}
 }
@@ -543,14 +549,13 @@ void XViewer::_checkWifiStatus()
 		if (_wStatus == WL_AP_CONNECTED)
 		{
 			// a device has connected to the AP
-			Serial.println("[WF]    Device connected to AP");
+			DBG("WIFI","Device connected to AP");
 			_blinkLed = 1;
 		}
 		else
 		{
 			// a device has disconnected from the AP, and we are back in listening mode
-			Serial.println("[WF]    Device disconnected to AP");
-
+			DBG("WIFI","Device disconnected to AP");
 			_blinkLed = 0;
 		}
 	}
@@ -558,17 +563,16 @@ void XViewer::_checkWifiStatus()
 
 void XViewer::_printWiFiStatus()
 {
-	Serial.print("[WF]    IP address: ");
-	Serial.println(WiFi.localIP());
-	Serial.println("[WF]    SSID: " + String(WiFi.SSID()));
-	Serial.println("[WF]    PASS: " + String(_pass));
+	DBG("WIFI","IP address: "+String(WiFi.localIP()));
+	DBG("WIFI","SSID:  "+String(WiFi.SSID()));
+	DBG("WIFI","PASS:  "+String(_pass));
 }
 
 void XViewer::_checkPassLength(String pass)
 {
 	if (pass.length() < 8)
 	{
-		Serial.println("Password must be at least 8 char!");
+		DBG("WIFI","ERROR! Password must be at least 8 char!");
 		while (1)
 			;
 	}
@@ -618,12 +622,12 @@ bool XViewer::deleteSensConfig()
 {
 	if (_fs.deleteConfig(PATH_SENS_CONFIG))
 	{
-		Serial.println("Sensor config deleted");
+		DBG("SENSOR","Sensor config deleted");		
 		return true;
 	}
 	else
 	{
-		Serial.println("Fail to delete sensor config");
+		DBG("SENSOR","Fail to delete sensor config");		
 		return false;
 	}
 }
@@ -632,12 +636,12 @@ bool XViewer::deleteUserConfig()
 {
 	if (_fs.deleteConfig(PATH_USER_CONFIG))
 	{
-		Serial.println("User config deleted");
+		DBG("USER","User config deleted");		
 		return true;
 	}
 	else
 	{
-		Serial.println("Fail to delete user config");
+		DBG("USER","Fail to delete user config");		
 		return false;
 	}
 }
@@ -646,12 +650,12 @@ bool XViewer::deleteAlarmConfig()
 {
 	if (_fs.deleteConfig(PATH_ALARM_CONFIG))
 	{
-		Serial.println("Alarm config deleted");
+		DBG("ALARM","Alarm config deleted");		
 		return true;
 	}
 	else
 	{
-		Serial.println("Fail to delete alarm config");
+		DBG("ALARM","Fail to delete alarm config");		
 		return false;
 	}
 }
@@ -660,12 +664,12 @@ bool XViewer::deleteProdConfig()
 {
 	if (_fs.deleteConfig(PATH_PROD_CONFIG))
 	{
-		Serial.println("Prod config deleted");
+		DBG("PROD","Prod config deleted");	
 		return true;
 	}
 	else
 	{
-		Serial.println("Fail to delete prod config");
+		DBG("PROD","Fail to delete prod config");	
 		return false;
 	}
 }

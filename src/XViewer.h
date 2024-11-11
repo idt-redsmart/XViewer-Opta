@@ -10,6 +10,9 @@
 #include "printer.h"
 #include "fs.h"
 
+#define DBG(type, object) Serial.println("[" + String(type) +"]\t"+ String(object))
+
+
 class XViewer
 {
 public:

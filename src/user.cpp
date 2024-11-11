@@ -367,7 +367,7 @@ void Users::_dbg(String str, bool header)
     if (_dbgOn)
     {
         if(header)
-        Serial.println("[US]\t" + str);
+        Serial.println("[USER]\t" + str);
         else
         Serial.println(str);
     }

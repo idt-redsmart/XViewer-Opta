@@ -236,7 +236,7 @@ void Sensors::_dbg(String str, bool header)
     if (_dbgOn)
     {
         if (header)
-            Serial.println("[SENS]\t" + str);
+            Serial.println("[SENSOR]\t" + str);
         else
             Serial.println(str);
     }
