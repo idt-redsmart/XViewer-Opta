@@ -275,6 +275,66 @@ bool FsClass::readProdConfig(std::vector<prodStruct_t> &prodVect)
     return true;
 }
 
+bool FsClass::readPrinterConfig(printerStruct_t &printerConfig) {
+    // Stringa per memorizzare il contenuto del file
+    String res = String();
+
+    // Apertura del file in modalità lettura
+    FILE *configFile = fopen(PATH_PRINTER_CONFIG, "r");
+
+    _dbg("Reading printer config file at: " + String(PATH_PRINTER_CONFIG));
+
+    // Verifica che il file sia stato trovato
+    if (configFile == NULL) {
+        _dbg("File not found");
+        return false;
+    }
+
+    _dbg("File found");
+
+    // Lettura del file carattere per carattere
+    uint8_t isChar = 1;
+    char cRead;
+    while (isChar > 0) {
+        isChar = fread((uint8_t *)&cRead, sizeof(cRead), 1, configFile);
+        if (isChar)
+            res += cRead;
+    }
+
+    // Chiudi il file dopo la lettura
+    fclose(configFile);
+
+    // Deserializza il contenuto JSON in un DynamicJsonDocument
+    DynamicJsonDocument json(1024); // Definisci CONFIG_PRINTER_JSON_SIZE in base alla dimensione prevista
+    DeserializationError error = deserializeJson(json, res);
+
+    // Gestisci eventuali errori di parsing
+    if (error) {
+        _dbg("Failed to parse JSON: " + String(error.c_str()));
+        return false;
+    }
+
+    // Mappa i campi JSON nella struttura
+    printerConfig.enable = json["enable"];
+    printerConfig.printDate = json["printDate"];
+    printerConfig.printCstr = json["printCstr"];
+    printerConfig.printUser = json["printUser"];
+
+    const char *customerStr = json["customerStr"];
+    strncpy(printerConfig.customerStr, customerStr, PROD_CSTR_SIZE);
+
+    const char *userStr = json["userStr"];
+    strncpy(printerConfig.userStr, userStr, USER_USERNAME_SIZE);
+
+    const char *productCode = json["productCode"];
+    strncpy(printerConfig.productCode, productCode, PROD_CODE_SIZE);
+
+    const char *productName = json["productName"];
+    strncpy(printerConfig.productName, productName, PROD_NAME_SIZE);
+
+    return true; // Lettura e parsing riusciti
+}
+
 void FsClass::_dbg(String str)
 {
     if (_dbgOn)

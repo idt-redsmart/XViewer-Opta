@@ -115,6 +115,25 @@ void Printer::_dbg(String str)
         Serial.println("[PRINTER]\t" + str);
 }
 
+DynamicJsonDocument Printer::structToJson()
+{
+    // Crea un oggetto JSON con una dimensione dinamica adeguata
+    DynamicJsonDocument jsonDoc(1024); // Adatta la dimensione in base alle tue esigenze
+
+    // Aggiunge i membri della struttura al documento JSON
+    jsonDoc["enable"] = _printer.enable;
+    jsonDoc["printDate"] = _printer.printDate;
+    jsonDoc["printCstr"] = _printer.printCstr;
+    jsonDoc["printUser"] = _printer.printUser;
+    jsonDoc["customerStr"] = _printer.customerStr;
+    jsonDoc["userStr"] = _printer.userStr;
+    jsonDoc["productCode"] = _printer.productCode;
+    jsonDoc["productName"] = _printer.productName;
+
+    // Restituisce il documento JSON
+    return jsonDoc;
+}
+
 void XViewer::_dbgP(String str)
 {
     if (_dbgPOn)

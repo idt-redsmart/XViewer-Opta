@@ -130,7 +130,7 @@ bool Production::updateCustomer(char code[PROD_CODE_SIZE], char newCstr[PROD_CST
     return false;
 }
 
-bool Production::updateCounter(char code[PROD_CODE_SIZE], uint8_t counter)
+bool Production::updateCounter(const char* code, uint8_t counter)
 {
     // Scan prod vector and check if the code is in vector
     for (uint8_t index = 0; index < _prod.size(); index++)
@@ -170,7 +170,7 @@ bool Production::updateCounter(char code[PROD_CODE_SIZE], uint8_t counter)
     return false;
 }
 
-bool Production::updateCounter(char code[PROD_CODE_SIZE], uint8_t counter, uint32_t newCounterVal)
+bool Production::updateCounter(const char* code, uint8_t counter, uint32_t newCounterVal)
 {
     // Scan prod vector and check if the code is in vector
     for (uint8_t index = 0; index < _prod.size(); index++)

@@ -57,6 +57,7 @@
 #define PATH_USER_CONFIG PATH_PREFIX "/userConfig.txt"
 #define PATH_ALARM_CONFIG PATH_PREFIX "/alarmConfig.txt"
 #define PATH_PROD_CONFIG PATH_PREFIX "/prodConfig.txt"
+#define PATH_PRINTER_CONFIG PATH_PREFIX "/printerConfig.txt"
 
 
 

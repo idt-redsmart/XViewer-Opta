@@ -57,6 +57,7 @@ void XViewer::init()
 	_initUser();
 	_initAlarm();
 	_initProd();
+	_initPrinter();
 
 	digitalWrite(LEDR, 0);
 }
@@ -350,7 +351,7 @@ bool XViewer::updateProdCustomer(char code[PROD_CODE_SIZE], char newCstr[PROD_CS
 	return _prods.updateCustomer(code, newCstr);
 }
 
-bool XViewer::updateProdCounter(char code[PROD_CODE_SIZE], uint8_t counter, uint32_t newCounterVal)
+bool XViewer::updateProdCounter(const char* code, uint8_t counter, uint32_t newCounterVal)
 {
 	if(_prods.updateCounter(code, counter, newCounterVal) && _storeProd())
 		return true;
@@ -358,7 +359,7 @@ bool XViewer::updateProdCounter(char code[PROD_CODE_SIZE], uint8_t counter, uint
 		return false;
 }
 
-bool XViewer::updateProdCounter(char code[PROD_CODE_SIZE], uint8_t counter)
+bool XViewer::updateProdCounter(const char* code, uint8_t counter)
 {
 	if(_prods.updateCounter(code, counter) && _storeProd())
 		return true;
@@ -598,6 +599,11 @@ bool XViewer::_initProd()
 	return _fs.readProdConfig(_prods.getProdVect());
 }
 
+bool XViewer::_initPrinter()
+{
+	return _fs.readPrinterConfig(_printer.getPrinter());
+}
+
 bool XViewer::_storeSens()
 {
 	return _fs.storeConfig(PATH_SENS_CONFIG, _sensors.vectToJson());
@@ -616,6 +622,11 @@ bool XViewer::_storeAlarm()
 bool XViewer::_storeProd()
 {
 	return _fs.storeConfig(PATH_PROD_CONFIG, _prods.vectToJson());
+}
+
+bool XViewer::_storePrinter()
+{
+	return _fs.storeConfig(PATH_PRINTER_CONFIG, _printer.structToJson());
 }
 
 bool XViewer::deleteSensConfig()

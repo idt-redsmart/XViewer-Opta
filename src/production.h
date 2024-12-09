@@ -29,8 +29,8 @@ public:
     bool removeProd(char code[PROD_CODE_SIZE]);
     bool updateName(char code[PROD_CODE_SIZE], char newName[PROD_NAME_SIZE]);
     bool updateCustomer(char code[PROD_CODE_SIZE], char newCstr[PROD_CSTR_SIZE]);
-    bool updateCounter(char code[PROD_CODE_SIZE], uint8_t counter);
-    bool updateCounter(char code[PROD_CODE_SIZE], uint8_t counter, uint32_t newCounterVal);
+    bool updateCounter(const char* code, uint8_t counter);
+    bool updateCounter(const char* code, uint8_t counter, uint32_t newCounterVal);
 
     void print();
 

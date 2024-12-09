@@ -24,6 +24,7 @@ public:
     bool readUserConfig(std::vector<userStruct_t> &userVect);
     bool readAlarmConfig(std::vector<alarmStruct_t> &alarmVect);
     bool readProdConfig(std::vector<prodStruct_t> &prodVect);
+    bool readPrinterConfig(printerStruct_t &printerConfig);
 
     void setDbg(bool dbgOn) { _dbgOn = dbgOn; }
 

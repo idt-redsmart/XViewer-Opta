@@ -644,8 +644,8 @@ void XViewer::_postSetPrinterData(WiFiClient &client, String body)
                 userTmp = String(manualUser);
                 // memcpy(_printerData.userStr, userTmp.c_str(), USER_USERNAME_SIZE);
                 _printer.setUserStr(manualUser);
-
-                // _storeDataPrinterInFlash(_printerData);
+                _storePrinter();
+                //_storeDataPrinterInFlash(_printerData);
             }
         }
     }

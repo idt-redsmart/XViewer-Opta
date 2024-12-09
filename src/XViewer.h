@@ -270,7 +270,7 @@ public:
      * @param newCounterVal: "New value to assign to the counter.
      * @return  True if the indicated counter was found and updated successfully.
      */
-    bool updateProdCounter(char code[PROD_CODE_SIZE], uint8_t counter, uint32_t newCounterVal);
+    bool updateProdCounter(const char* code, uint8_t counter, uint32_t newCounterVal);
 
     /**
      * @brief   Increment the counter by one for the specified production.
@@ -279,7 +279,7 @@ public:
      * @param counter: Counter to increment (T_OK, T_NOK, P_OK, P_NOK)
      * @return  True if the indicated counter was found and incremented successfully.
      */
-    bool updateProdCounter(char code[PROD_CODE_SIZE], uint8_t counter);
+    bool updateProdCounter(const char* code, uint8_t counter);
 
     /**
      * @brief   Return the structure of the current production set.
@@ -503,11 +503,14 @@ private:
     bool _initUser();
     bool _initAlarm();
     bool _initProd();
+    bool _initPrinter();
+
 
     bool _storeSens();
     bool _storeUser();
     bool _storeAlarm();
     bool _storeProd();
+    bool _storePrinter();
 
     // API
     void _handleRoot(WiFiClient &client);
