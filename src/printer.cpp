@@ -1,6 +1,7 @@
 #include "XViewer.h"
 
-printerStruct_t XViewer::getCurrentPrinter(bool printDbg)
+template <typename ServerType, typename ClientType>
+printerStruct_t XViewer<ServerType, ClientType>::getCurrentPrinter(bool printDbg)
 {
     char _buffer[128];
     int8_t indexWorkingUser = _users.getIndexWorkingUser();
@@ -85,7 +86,8 @@ void Printer::disable()
     _printer.enable = false;
 }
 
-void XViewer::_setPrinterProdData()
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::_setPrinterProdData()
 {
     prodStruct_t currentProd = _prods.getCurrentProd();
     _printer.setProdCode(currentProd.code);
@@ -93,7 +95,8 @@ void XViewer::_setPrinterProdData()
     _printer.setProdCstr(currentProd.customer);
 }
 
-String XViewer::_boolToString(bool data)
+template <typename ServerType, typename ClientType>
+String XViewer<ServerType, ClientType>::_boolToString(bool data)
 {
     if (data)
         return "TRUE";
@@ -134,7 +137,8 @@ DynamicJsonDocument Printer::structToJson()
     return jsonDoc;
 }
 
-void XViewer::_dbgP(String str)
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::_dbgP(String str)
 {
     if (_dbgPOn)
         Serial.println("[PRINTER]\t" + str);

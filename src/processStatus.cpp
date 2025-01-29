@@ -1,7 +1,9 @@
 
 #include <XViewer.h>
 
-bool XViewer::setProcessStatus(processPhaseEnum status, String alarmCode)
+
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::setProcessStatus(processPhaseEnum status, String alarmCode)
 {
 
     int errorCodeInt = -1;
@@ -42,7 +44,8 @@ bool XViewer::setProcessStatus(processPhaseEnum status, String alarmCode)
     }
 }
 
-StaticJsonDocument<200> XViewer::getProcessStatus()
+template <typename ServerType, typename ClientType>
+StaticJsonDocument<200> XViewer<ServerType, ClientType>::getProcessStatus()
 {
     StaticJsonDocument<200> jsonOut;
     // JsonObject objOut = jsonOut.to<JsonObject>();

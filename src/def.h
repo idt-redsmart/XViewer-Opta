@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include <WiFi.h>
+#include <Ethernet.h>
 #include <ArduinoJson.h>
 #include <mbed.h>
 #include <mbed_mktime.h>

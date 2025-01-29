@@ -7,7 +7,8 @@
 [API]        BODY: {"epoch": 1690279548}
 */
 
-String XViewer::updateRtc(uint32_t epoch)
+template <typename ServerType, typename ClientType>
+String XViewer<ServerType, ClientType>::updateRtc(uint32_t epoch)
 {
     set_time(epoch);
     Serial.println("Epoch setted: " + String(epoch));
@@ -15,7 +16,8 @@ String XViewer::updateRtc(uint32_t epoch)
     return getCurrentTime();
 }
 
-String XViewer::getCurrentTime()
+template <typename ServerType, typename ClientType>
+String XViewer<ServerType, ClientType>::getCurrentTime()
 {
     tm t;
     _rtc_localtime(time(NULL), &t, RTC_FULL_LEAP_YEAR_SUPPORT);

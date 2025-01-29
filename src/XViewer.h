@@ -13,6 +13,7 @@
 #define DBG(type, object) Serial.println("[" + String(type) +"]\t"+ String(object))
 
 
+template <typename ServerType, typename ClientType>
 class XViewer
 {
 public:
@@ -466,7 +467,7 @@ public:
     bool deleteAllConfig();
 
 private:
-    WiFiServer _server;
+    ServerType _server;
 
     IPAddress _serverIp;
     String _ssid = SSID_WIFI; // your network SSID (name)
@@ -513,33 +514,33 @@ private:
     bool _storePrinter();
 
     // API
-    void _handleRoot(WiFiClient &client);
-    void _handleNotFound(WiFiClient &client);
-    void _getSensors(WiFiClient &client);
-    void _getSensorsState(WiFiClient &client);
-    void _getTotalCounters(WiFiClient &client);
-    void _getPartialCounters(WiFiClient &client);
-    void _getInfoUser(WiFiClient &client);
-    void _getProduct(WiFiClient &client);
-    void _getError(WiFiClient &client);
-    void _getPrinterData(WiFiClient &client);
-    void _getCurrentProduction(WiFiClient &client);
-    void _getWorkingUser(WiFiClient &client);
-    void _getFlashProgramCounter(WiFiClient &client);
-    void _getProcessStatus(WiFiClient &client);
+    void _handleRoot(ClientType &client);
+    void _handleNotFound(ClientType &client);
+    void _getSensors(ClientType &client);
+    void _getSensorsState(ClientType &client);
+    void _getTotalCounters(ClientType &client);
+    void _getPartialCounters(ClientType &client);
+    void _getInfoUser(ClientType &client);
+    void _getProduct(ClientType &client);
+    void _getError(ClientType &client);
+    void _getPrinterData(ClientType &client);
+    void _getCurrentProduction(ClientType &client);
+    void _getWorkingUser(ClientType &client);
+    void _getFlashProgramCounter(ClientType &client);
+    void _getProcessStatus(ClientType &client);
 
-    void _postAddUser(WiFiClient &client, String body);
-    void _postUpdateUser(WiFiClient &client, String body);
-    void _postLogin(WiFiClient &client, String body);
-    void _postSetWorkingUser(WiFiClient &client, String body);
-    void _postUpdateSensor(WiFiClient &client, String body);
-    void _postAddProduct(WiFiClient &client, String body);
-    void _postUpdateProduct(WiFiClient &client, String body);
-    void _postSetPrinterData(WiFiClient &client, String body);
-    void _postSetProduction(WiFiClient &client, String body);
-    void _postAddError(WiFiClient &client, String body);
-    void _postUpdateError(WiFiClient &client, String body);
-    void _postUpdateRtc(WiFiClient &client, String body);
+    void _postAddUser(ClientType &client, String body);
+    void _postUpdateUser(ClientType &client, String body);
+    void _postLogin(ClientType &client, String body);
+    void _postSetWorkingUser(ClientType &client, String body);
+    void _postUpdateSensor(ClientType &client, String body);
+    void _postAddProduct(ClientType &client, String body);
+    void _postUpdateProduct(ClientType &client, String body);
+    void _postSetPrinterData(ClientType &client, String body);
+    void _postSetProduction(ClientType &client, String body);
+    void _postAddError(ClientType &client, String body);
+    void _postUpdateError(ClientType &client, String body);
+    void _postUpdateRtc(ClientType &client, String body);
 
     /**
      * @brief Based on the request received as a parameter, it switches between the different available methods to provide the correct response to the received request.
@@ -547,9 +548,11 @@ private:
      * @param response: Enum of the response to be sent. (enum response)
      * @param body: The body received from the request, if the request is a POST. Default is an empty string "" in case of GET request.
      */
-    void _sendResponse(WiFiClient &client, uint8_t response, String body = "");
+    void _sendResponse(ClientType &client, uint8_t response, String body = "");
 
     uint8_t _currentResponse = 0; // switch response index
 };
+
+#include "XViewer.tpp"
 
 #endif

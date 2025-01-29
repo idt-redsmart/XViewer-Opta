@@ -1,6 +1,7 @@
 #include "XViewer.h"
 
-void XViewer::_getSensors(WiFiClient &client)
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::_getSensors(ClientType &client)
 {
     std::vector<sensorStruct_t> tmpV(_sensors.getSensorsVect());
 
@@ -42,7 +43,8 @@ void XViewer::_getSensors(WiFiClient &client)
     _dbgA("CALLED API GET SENSOR");
 }
 
-void XViewer::_getSensorsState(WiFiClient &client)
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::_getSensorsState(ClientType &client)
 {
     std::vector<sensorStruct_t> tmpV(_sensors.getSensorsVect());
 
@@ -76,7 +78,8 @@ void XViewer::_getSensorsState(WiFiClient &client)
     _dbgA("CALLED API GET SENSOR STATE");
 }
 
-void XViewer::_getTotalCounters(WiFiClient &client)
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::_getTotalCounters(ClientType &client)
 {
     DynamicJsonDocument json(256);
     String str;
@@ -105,7 +108,8 @@ void XViewer::_getTotalCounters(WiFiClient &client)
     _dbgA("CALLED API GET TOTAL COUNTERS");
 }
 
-void XViewer::_getPartialCounters(WiFiClient &client)
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::_getPartialCounters(ClientType &client)
 {
     DynamicJsonDocument json(256);
     String str;
@@ -134,7 +138,8 @@ void XViewer::_getPartialCounters(WiFiClient &client)
     _dbgA("CALLED API GET PARTIAL COUNTERS");
 }
 
-void XViewer::_getInfoUser(WiFiClient &client)
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::_getInfoUser(ClientType &client)
 {
     uint16_t jsonSize = (32 + sizeof(userStruct_t)) * (USER_MAX_NUMBER + 1);
 
@@ -170,7 +175,8 @@ void XViewer::_getInfoUser(WiFiClient &client)
     _dbgA("CALLED API GET INFO USER");
 }
 
-void XViewer::_getProduct(WiFiClient &client)
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::_getProduct(ClientType &client)
 {
     uint16_t jsonSize = 64 * PROD_MAX_NUMBER;
     DynamicJsonDocument json(jsonSize);
@@ -204,7 +210,8 @@ void XViewer::_getProduct(WiFiClient &client)
     _dbgA("CALLED API GET PRODUCT ");
 }
 
-void XViewer::_getPrinterData(WiFiClient &client)
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::_getPrinterData(ClientType &client)
 {
     printerStruct_t tmp(getCurrentPrinter());
 
@@ -237,7 +244,8 @@ void XViewer::_getPrinterData(WiFiClient &client)
     _dbgA("CALLED API GET PRINTER DATA");
 }
 
-void XViewer::_getCurrentProduction(WiFiClient &client)
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::_getCurrentProduction(ClientType &client)
 {
     DynamicJsonDocument json(512);
     String str = String();
@@ -263,7 +271,8 @@ void XViewer::_getCurrentProduction(WiFiClient &client)
     _dbgA("CALLED API GET CURRENT PRODUCTION");
 }
 
-void XViewer::_getError(WiFiClient &client)
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::_getError(ClientType &client)
 {
     std::vector<alarmStruct_t> tmp(_alarms.getAlarmsVect());
 
@@ -298,7 +307,8 @@ void XViewer::_getError(WiFiClient &client)
     _dbgA("CALLED API GET ERROR");
 }
 
-void XViewer::_getWorkingUser(WiFiClient &client)
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::_getWorkingUser(ClientType &client)
 {
     DynamicJsonDocument json(256);
     String str;
@@ -331,7 +341,8 @@ void XViewer::_getWorkingUser(WiFiClient &client)
     _dbgA("CALLED API GET WORKING USER");
 }
 
-void XViewer::_getProcessStatus(WiFiClient &client)
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::_getProcessStatus(ClientType &client)
 {
     String res = String();
 
@@ -349,7 +360,8 @@ void XViewer::_getProcessStatus(WiFiClient &client)
 
 // POST
 
-void XViewer::_postAddUser(WiFiClient &client, String body)
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::_postAddUser(ClientType &client, String body)
 {
     const char *json = body.c_str();
     StaticJsonDocument<200> doc;
@@ -386,7 +398,8 @@ void XViewer::_postAddUser(WiFiClient &client, String body)
     client.println();
 }
 
-void XViewer::_postLogin(WiFiClient &client, String body)
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::_postLogin(ClientType &client, String body)
 {
     const char *jsonIn = body.c_str();
     StaticJsonDocument<200> doc;
@@ -440,7 +453,8 @@ void XViewer::_postLogin(WiFiClient &client, String body)
         _dbgA("User logged: ");
 }
 
-void XViewer::_postSetWorkingUser(WiFiClient &client, String body)
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::_postSetWorkingUser(ClientType &client, String body)
 {
     const char *jsonIn = body.c_str();
     StaticJsonDocument<200> doc;
@@ -481,7 +495,8 @@ void XViewer::_postSetWorkingUser(WiFiClient &client, String body)
     client.println();
 }
 
-void XViewer::_postUpdateSensor(WiFiClient &client, String body)
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::_postUpdateSensor(ClientType &client, String body)
 {
     const char *jsonIn = body.c_str();
     String res = String();
@@ -515,7 +530,8 @@ void XViewer::_postUpdateSensor(WiFiClient &client, String body)
     client.println();
 }
 
-void XViewer::_postAddProduct(WiFiClient &client, String body)
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::_postAddProduct(ClientType &client, String body)
 {
     const char *jsonIn = body.c_str();
     StaticJsonDocument<512> doc;
@@ -549,7 +565,8 @@ void XViewer::_postAddProduct(WiFiClient &client, String body)
     client.println();
 }
 
-void XViewer::_postUpdateUser(WiFiClient &client, String body)
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::_postUpdateUser(ClientType &client, String body)
 {
     const char *jsonIn = body.c_str();
     StaticJsonDocument<200> doc;
@@ -601,7 +618,8 @@ void XViewer::_postUpdateUser(WiFiClient &client, String body)
     client.println();
 }
 
-void XViewer::_postSetPrinterData(WiFiClient &client, String body)
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::_postSetPrinterData(ClientType &client, String body)
 {
     const char *jsonIn = body.c_str();
     StaticJsonDocument<200> doc;
@@ -676,7 +694,8 @@ void XViewer::_postSetPrinterData(WiFiClient &client, String body)
     client.println();
 }
 
-void XViewer::_postUpdateProduct(WiFiClient &client, String body)
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::_postUpdateProduct(ClientType &client, String body)
 {
     const char *jsonIn = body.c_str();
     StaticJsonDocument<200> doc;
@@ -727,7 +746,8 @@ void XViewer::_postUpdateProduct(WiFiClient &client, String body)
     client.println();
 }
 
-void XViewer::_postSetProduction(WiFiClient &client, String body)
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::_postSetProduction(ClientType &client, String body)
 {
     const char *jsonIn = body.c_str();
     StaticJsonDocument<200> doc;
@@ -769,7 +789,8 @@ void XViewer::_postSetProduction(WiFiClient &client, String body)
     client.println();
 }
 
-void XViewer::_postAddError(WiFiClient &client, String body)
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::_postAddError(ClientType &client, String body)
 {
     const char *jsonIn = body.c_str();
     StaticJsonDocument<200> doc;
@@ -805,7 +826,8 @@ void XViewer::_postAddError(WiFiClient &client, String body)
     client.println();
 }
 
-void XViewer::_postUpdateError(WiFiClient &client, String body)
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::_postUpdateError(ClientType &client, String body)
 {
     const char *jsonIn = body.c_str();
     StaticJsonDocument<200> doc;
@@ -841,7 +863,8 @@ void XViewer::_postUpdateError(WiFiClient &client, String body)
     client.println();
 }
 
-void XViewer::_postUpdateRtc(WiFiClient &client, String body)
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::_postUpdateRtc(ClientType &client, String body)
 {
     const char *jsonIn = body.c_str();
     StaticJsonDocument<200> doc;

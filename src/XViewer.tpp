@@ -1,19 +1,26 @@
-
 #include "XViewer.h"
 
-void XViewer::config(IPAddress serverIp)
+
+// Definizione esplicita delle istanze per forzare la compilazione
+template class XViewer<WiFiServer, WiFiClient>;
+template class XViewer<EthernetServer, EthernetClient>;
+
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::config(IPAddress serverIp)
 {
 	_serverIp = serverIp;
 }
 
-void XViewer::config(String ssid, String pass)
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::config(String ssid, String pass)
 {
 	_ssid = ssid;
 	_checkPassLength(pass);
 	_pass = pass;
 }
 
-void XViewer::config(IPAddress serverIp, String ssid, String pass)
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::config(IPAddress serverIp, String ssid, String pass)
 {
 	_serverIp = serverIp;
 	_ssid = ssid;
@@ -21,7 +28,8 @@ void XViewer::config(IPAddress serverIp, String ssid, String pass)
 	_pass = pass;
 }
 
-void XViewer::init()
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::init()
 {
 	pinMode(LEDR, OUTPUT);
 	pinMode(LEDG, OUTPUT);
@@ -62,14 +70,15 @@ void XViewer::init()
 	digitalWrite(LEDR, 0);
 }
 
-void XViewer::handleClient()
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::handleClient()
 {
 	_checkWifiStatus();
 	_ledLoop();
 
 	uint8_t _lineCounter = 0;
 
-	WiFiClient client = _server.available();
+	ClientType client = _server.available();
 	if (client)
 	{
 		bool isGet = false;
@@ -214,144 +223,172 @@ void XViewer::handleClient()
 }
 
 // SENSOR
-std::vector<sensorStruct_t> XViewer::getSensorsVect()
+template <typename ServerType, typename ClientType>
+std::vector<sensorStruct_t> XViewer<ServerType, ClientType>::getSensorsVect()
 {
 	return _sensors.getSensorsVect();
 }
 
-void XViewer::printSensors()
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::printSensors()
 {
 	_sensors.printSensors();
 }
 
-bool XViewer::addSensor(uint8_t code, char name[SENSOR_NAME_SIZE], char type[SENSOR_TYPE_SIZE])
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::addSensor(uint8_t code, char name[SENSOR_NAME_SIZE], char type[SENSOR_TYPE_SIZE])
 {
 	return _sensors.addSensor(code, name, type);
 }
 
-bool XViewer::removeSensor(uint8_t code)
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::removeSensor(uint8_t code)
 {
 	return _sensors.removeSensor(code);
 }
 
-bool XViewer::updateSensName(uint8_t code, char newName[SENSOR_NAME_SIZE])
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::updateSensName(uint8_t code, char newName[SENSOR_NAME_SIZE])
 {
 	return _sensors.updateName(code, newName);
 }
 
-bool XViewer::updateSensType(uint8_t code, char newType[SENSOR_TYPE_SIZE])
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::updateSensType(uint8_t code, char newType[SENSOR_TYPE_SIZE])
 {
 	return _sensors.updateType(code, newType);
 }
 
-bool XViewer::updateSensState(uint8_t code, bool newState)
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::updateSensState(uint8_t code, bool newState)
 {
 	return _sensors.updateState(code, newState);
 }
 
-sensorStruct_t XViewer::getSensor(uint8_t code)
+template <typename ServerType, typename ClientType>
+sensorStruct_t XViewer<ServerType, ClientType>::getSensor(uint8_t code)
 {
 	return _sensors.getSensor(code);
 }
 
 // USER
-std::vector<userStruct_t> XViewer::getUserVect()
+template <typename ServerType, typename ClientType>
+std::vector<userStruct_t> XViewer<ServerType, ClientType>::getUserVect()
 {
 	return _users.getUserVect();
 }
 
-void XViewer::printUsers()
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::printUsers()
 {
 	_users.printUsers();
 }
 
-bool XViewer::addUser(char username[USER_USERNAME_SIZE], char pass[USER_PASS_SIZE], bool isAdmin, bool autologin)
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::addUser(char username[USER_USERNAME_SIZE], char pass[USER_PASS_SIZE], bool isAdmin, bool autologin)
 {
 	return _users.addUser(username, pass, isAdmin, autologin);
 }
 
-bool XViewer::removeUser(char username[USER_USERNAME_SIZE])
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::removeUser(char username[USER_USERNAME_SIZE])
 {
 	return _users.removeUser(username);
 }
 
-bool XViewer::updateUserPass(char username[USER_USERNAME_SIZE], char newPass[USER_PASS_SIZE])
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::updateUserPass(char username[USER_USERNAME_SIZE], char newPass[USER_PASS_SIZE])
 {
 	return _users.updatePass(username, newPass);
 }
 
-bool XViewer::updateUserIsAdmin(char username[USER_USERNAME_SIZE], bool newIsAdmin)
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::updateUserIsAdmin(char username[USER_USERNAME_SIZE], bool newIsAdmin)
 {
 	return _users.updateIsAdmin(username, newIsAdmin);
 }
 
-bool XViewer::updateUserAutologin(char username[USER_USERNAME_SIZE], bool newAutologin)
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::updateUserAutologin(char username[USER_USERNAME_SIZE], bool newAutologin)
 {
 	return _users.updateAutologin(username, newAutologin);
 }
 
-userStruct_t XViewer::getUser(char username[USER_USERNAME_SIZE])
+template <typename ServerType, typename ClientType>
+userStruct_t XViewer<ServerType, ClientType>::getUser(char username[USER_USERNAME_SIZE])
 {
 	return _users.getUser(username);
 }
 
-String XViewer::login(char username[USER_USERNAME_SIZE], char pass[USER_PASS_SIZE])
+template <typename ServerType, typename ClientType>
+String XViewer<ServerType, ClientType>::login(char username[USER_USERNAME_SIZE], char pass[USER_PASS_SIZE])
 {
 	return _users.login(username, pass);
 }
 
-bool XViewer::setWorkingUser(char username[USER_USERNAME_SIZE])
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::setWorkingUser(char username[USER_USERNAME_SIZE])
 {
 	return _users.setWorkingUser(username);
 }
 
-userStruct_t XViewer::getWorkingUser()
+template <typename ServerType, typename ClientType>
+userStruct_t XViewer<ServerType, ClientType>::getWorkingUser()
 {
 	return _users.getWorkingUser();
 }
 
-bool XViewer::setDefaultWorkingUser(char username[USER_USERNAME_SIZE])
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::setDefaultWorkingUser(char username[USER_USERNAME_SIZE])
 {
 	return _users.setDefaultWorkingUser(username);
 }
 
-userStruct_t XViewer::getDefaultWorkingUser()
+template <typename ServerType, typename ClientType>
+userStruct_t XViewer<ServerType, ClientType>::getDefaultWorkingUser()
 {
 	return _users.getDefaultWorkingUser();
 }
 
 // PROD
-std::vector<prodStruct_t> XViewer::getProdVect()
+template <typename ServerType, typename ClientType>
+std::vector<prodStruct_t> XViewer<ServerType, ClientType>::getProdVect()
 {
 	return _prods.getProdVect();
 }
 
-void XViewer::printProds()
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::printProds()
 {
 	return _prods.print();
 }
 
-bool XViewer::addProd(char code[PROD_CODE_SIZE], char name[PROD_NAME_SIZE], char customer[PROD_CSTR_SIZE])
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::addProd(char code[PROD_CODE_SIZE], char name[PROD_NAME_SIZE], char customer[PROD_CSTR_SIZE])
 {
 	return _prods.addProd(code, name, customer);
 }
 
-bool XViewer::removeProd(char code[PROD_CODE_SIZE])
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::removeProd(char code[PROD_CODE_SIZE])
 {
 	return _prods.removeProd(code);
 }
 
-bool XViewer::updateProdName(char code[PROD_CODE_SIZE], char newName[PROD_NAME_SIZE])
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::updateProdName(char code[PROD_CODE_SIZE], char newName[PROD_NAME_SIZE])
 {
 	return _prods.updateName(code, newName);
 }
 
-bool XViewer::updateProdCustomer(char code[PROD_CODE_SIZE], char newCstr[PROD_CSTR_SIZE])
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::updateProdCustomer(char code[PROD_CODE_SIZE], char newCstr[PROD_CSTR_SIZE])
 {
 	return _prods.updateCustomer(code, newCstr);
 }
 
-bool XViewer::updateProdCounter(const char* code, uint8_t counter, uint32_t newCounterVal)
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::updateProdCounter(const char* code, uint8_t counter, uint32_t newCounterVal)
 {
 	if(_prods.updateCounter(code, counter, newCounterVal) && _storeProd())
 		return true;
@@ -359,7 +396,8 @@ bool XViewer::updateProdCounter(const char* code, uint8_t counter, uint32_t newC
 		return false;
 }
 
-bool XViewer::updateProdCounter(const char* code, uint8_t counter)
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::updateProdCounter(const char* code, uint8_t counter)
 {
 	if(_prods.updateCounter(code, counter) && _storeProd())
 		return true;
@@ -367,70 +405,83 @@ bool XViewer::updateProdCounter(const char* code, uint8_t counter)
 		return false;
 }
 
-prodStruct_t XViewer::getCurrentProd()
+template <typename ServerType, typename ClientType>
+prodStruct_t XViewer<ServerType, ClientType>::getCurrentProd()
 {
 	return _prods.getCurrentProd();
 }
 
-bool XViewer::setCurrentProd(char code[PROD_CODE_SIZE])
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::setCurrentProd(char code[PROD_CODE_SIZE])
 {
 	return _prods.setCurrentProd(code);
 }
 
 // ALARM
-std::vector<alarmStruct_t> XViewer::getAlarmsVect()
+template <typename ServerType, typename ClientType>
+std::vector<alarmStruct_t> XViewer<ServerType, ClientType>::getAlarmsVect()
 {
 	return _alarms.getAlarmsVect();
 }
 
-bool XViewer::addAlarm(char code[ALARM_CODE_SIZE], char name[ALARM_NAME_SIZE])
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::addAlarm(char code[ALARM_CODE_SIZE], char name[ALARM_NAME_SIZE])
 {
 	return _alarms.addAlarm(code, name);
 }
 
-bool XViewer::removeAlarm(char code[ALARM_CODE_SIZE])
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::removeAlarm(char code[ALARM_CODE_SIZE])
 {
 	return _alarms.removeAlarm(code);
 }
 
-bool XViewer::updateAlarmName(char code[ALARM_CODE_SIZE], char newName[ALARM_NAME_SIZE])
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::updateAlarmName(char code[ALARM_CODE_SIZE], char newName[ALARM_NAME_SIZE])
 {
 	return _alarms.updateName(code, newName);
 }
 
-bool XViewer::updateAlarmCounter(char code[ALARM_CODE_SIZE], uint16_t increase)
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::updateAlarmCounter(char code[ALARM_CODE_SIZE], uint16_t increase)
 {
 	return _alarms.updateCounter(code, increase);
 }
 
-void XViewer::printAlarms()
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::printAlarms()
 {
 	return _alarms.print();
 }
 
 // PRINTER
-void XViewer::clearPrinterStruct()
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::clearPrinterStruct()
 {
 	return _printer.clearStruct();
 }
 
-void XViewer::enablePrinter(bool enableDate, bool enableCustomer, bool enableUser)
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::enablePrinter(bool enableDate, bool enableCustomer, bool enableUser)
 {
 	return _printer.enable(enableDate, enableCustomer, enableUser);
 }
 
-void XViewer::setPrinter(bool enableDate, bool enableCustomer, bool enableUser)
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::setPrinter(bool enableDate, bool enableCustomer, bool enableUser)
 {
 	return _printer.set(enableDate, enableCustomer, enableUser);
 }
 
-void XViewer::disablePrinter()
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::disablePrinter()
 {
 	return _printer.disable();
 }
 
 // PRIVATE
-void XViewer::_sendResponse(WiFiClient &client, uint8_t response, String body)
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::_sendResponse(ClientType &client, uint8_t response, String body)
 {
 	switch (response)
 	{
@@ -521,7 +572,8 @@ void XViewer::_sendResponse(WiFiClient &client, uint8_t response, String body)
 	_currentResponse = 0;
 }
 
-void XViewer::_ledLoop()
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::_ledLoop()
 {
 	cMillis = millis();
 	if (_blinkLed)
@@ -541,7 +593,8 @@ void XViewer::_ledLoop()
 	}
 }
 
-void XViewer::_checkWifiStatus()
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::_checkWifiStatus()
 {
 	if (_wStatus != WiFi.status())
 	{
@@ -562,14 +615,16 @@ void XViewer::_checkWifiStatus()
 	}
 }
 
-void XViewer::_printWiFiStatus()
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::_printWiFiStatus()
 {
 	DBG("WIFI","IP address: "+String(WiFi.localIP()));
 	DBG("WIFI","SSID:  "+String(WiFi.SSID()));
 	DBG("WIFI","PASS:  "+String(_pass));
 }
 
-void XViewer::_checkPassLength(String pass)
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::_checkPassLength(String pass)
 {
 	if (pass.length() < 8)
 	{
@@ -579,57 +634,68 @@ void XViewer::_checkPassLength(String pass)
 	}
 }
 
-bool XViewer::_initSens()
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::_initSens()
 {
 	return _fs.readSensConfig(_sensors.getSensorsVect());
 }
 
-bool XViewer::_initUser()
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::_initUser()
 {
 	return _fs.readUserConfig(_users.getUserVect());
 }
 
-bool XViewer::_initAlarm()
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::_initAlarm()
 {
 	return _fs.readAlarmConfig(_alarms.getAlarmsVect());
 }
 
-bool XViewer::_initProd()
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::_initProd()
 {
 	return _fs.readProdConfig(_prods.getProdVect());
 }
 
-bool XViewer::_initPrinter()
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::_initPrinter()
 {
 	return _fs.readPrinterConfig(_printer.getPrinter());
 }
 
-bool XViewer::_storeSens()
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::_storeSens()
 {
 	return _fs.storeConfig(PATH_SENS_CONFIG, _sensors.vectToJson());
 }
 
-bool XViewer::_storeUser()
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::_storeUser()
 {
 	return _fs.storeConfig(PATH_USER_CONFIG, _users.vectToJson());
 }
 
-bool XViewer::_storeAlarm()
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::_storeAlarm()
 {
 	return _fs.storeConfig(PATH_ALARM_CONFIG, _alarms.vectToJson());
 }
 
-bool XViewer::_storeProd()
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::_storeProd()
 {
 	return _fs.storeConfig(PATH_PROD_CONFIG, _prods.vectToJson());
 }
 
-bool XViewer::_storePrinter()
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::_storePrinter()
 {
 	return _fs.storeConfig(PATH_PRINTER_CONFIG, _printer.structToJson());
 }
 
-bool XViewer::deleteSensConfig()
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::deleteSensConfig()
 {
 	if (_fs.deleteConfig(PATH_SENS_CONFIG))
 	{
@@ -643,7 +709,8 @@ bool XViewer::deleteSensConfig()
 	}
 }
 
-bool XViewer::deleteUserConfig()
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::deleteUserConfig()
 {
 	if (_fs.deleteConfig(PATH_USER_CONFIG))
 	{
@@ -657,7 +724,8 @@ bool XViewer::deleteUserConfig()
 	}
 }
 
-bool XViewer::deleteAlarmConfig()
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::deleteAlarmConfig()
 {
 	if (_fs.deleteConfig(PATH_ALARM_CONFIG))
 	{
@@ -671,7 +739,8 @@ bool XViewer::deleteAlarmConfig()
 	}
 }
 
-bool XViewer::deleteProdConfig()
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::deleteProdConfig()
 {
 	if (_fs.deleteConfig(PATH_PROD_CONFIG))
 	{
@@ -685,7 +754,8 @@ bool XViewer::deleteProdConfig()
 	}
 }
 
-bool XViewer::deleteAllConfig()
+template <typename ServerType, typename ClientType>
+bool XViewer<ServerType, ClientType>::deleteAllConfig()
 {
 	bool resA = deleteAlarmConfig();
 	bool resP = deleteProdConfig();
@@ -695,13 +765,15 @@ bool XViewer::deleteAllConfig()
 	return (resA && resP && resS && resU);
 }
 
-void XViewer::_dbgA(String str)
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::_dbgA(String str)
 {
 	if (_dbgAOn)
 		Serial.println("[API]\t" + str);
 }
 
-void XViewer::setPrinterDbg(bool dbgOn)
+template <typename ServerType, typename ClientType>
+void XViewer<ServerType, ClientType>::setPrinterDbg(bool dbgOn)
 {
 	_printer.setDbg(dbgOn);
 	_dbgPOn = dbgOn;
