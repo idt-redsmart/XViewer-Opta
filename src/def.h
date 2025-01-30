@@ -8,6 +8,7 @@
 #include <mbed.h>
 #include <mbed_mktime.h>
 #include <vector>
+#include <type_traits>
 
 #include "uri.h"
 

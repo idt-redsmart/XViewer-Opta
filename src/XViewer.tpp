@@ -39,24 +39,32 @@ void XViewer<ServerType, ClientType>::init()
 	digitalWrite(LEDG, 1);
 	digitalWrite(LEDB, 0);
 
-	WiFi.config(_serverIp);
-
-	// Create the Access point
-	_wStatus = WiFi.beginAP(_ssid.c_str(), _pass.c_str());
-	if (_wStatus != WL_AP_LISTENING)
+	if(std::is_same<ServerType, WiFiServer>::value)
 	{
-		while (true)
-			;
+    	_dbgA("Using WifiServer");
+		WiFi.config(_serverIp);
+		// Create the Access point
+		_wStatus = WiFi.beginAP(_ssid.c_str(), _pass.c_str());
+		if (_wStatus != WL_AP_LISTENING)
+		{
+			while (true)
+				;
+		}
+		// you're connected now, so print out the status
+		_printWiFiStatus();
+
+	} else if(std::is_same<ServerType, EthernetServer>::value)
+	{
+		byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };  // Indirizzo MAC unico
+		Ethernet.begin(mac, _serverIp, _serverIp, _serverIp);
+    	_dbgA("Using EthernetServer");
 	}
 
-	// wait 1 seconds for connection:
-	delay(1000);
+	// wait 0.1 seconds for connection:
+	delay(100);
 
 	// start the web server
 	_server.begin();
-
-	// you're connected now, so print out the status
-	_printWiFiStatus();
 
 	cMillis = millis();
 
@@ -73,7 +81,8 @@ void XViewer<ServerType, ClientType>::init()
 template <typename ServerType, typename ClientType>
 void XViewer<ServerType, ClientType>::handleClient()
 {
-	_checkWifiStatus();
+	if(std::is_same<ServerType, WiFiServer>::value)
+		_checkWifiStatus();
 	_ledLoop();
 
 	uint8_t _lineCounter = 0;
