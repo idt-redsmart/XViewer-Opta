@@ -1,8 +1,12 @@
 
 #include <XViewer.h>
 
-// Create XViewer object.
-XViewer xv;
+
+// Create XViewer object using ethernet interface.
+XViewer<EthernetServer, EthernetClient> xv;
+
+// Create XViewer object using WiFi interface.
+//XViewer<WiFiServer, WiFiClient> xv;
 
 // Create an IPAddress object to assign to the webserver.
 IPAddress ip(192, 168, 1, 2);
